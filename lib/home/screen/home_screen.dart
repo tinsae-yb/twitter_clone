@@ -49,6 +49,10 @@ class _HomeScreenState extends State<HomeScreen> {
               return Container();
             },
           ),
+          floatingActionButton: FloatingActionButton(
+            onPressed: () => Navigator.pushNamed(context, "/createTweet"),
+            child: const Icon(Icons.add),
+          ),
         );
       },
       buildWhen: (previous, current) =>

@@ -63,7 +63,8 @@ class _YourProfileDoesntExistState extends State<YourProfileDoesntExist> {
                         controller: firstNameTextEditingController,
                         keyboardType: TextInputType.emailAddress,
                         validator: (v) {
-                          if (v?.isEmpty ?? true) return "Enter first name";
+                          if (v?.trim().isEmpty ?? true)
+                            return "Enter first name";
 
                           return null;
                         },
@@ -83,7 +84,7 @@ class _YourProfileDoesntExistState extends State<YourProfileDoesntExist> {
                       ),
                       TextFormField(
                         validator: (v) {
-                          if (v?.isEmpty ?? true) {
+                          if (v?.trim().isEmpty ?? true) {
                             return "Enter last name";
                           }
 
@@ -106,7 +107,7 @@ class _YourProfileDoesntExistState extends State<YourProfileDoesntExist> {
                       ),
                       TextFormField(
                         validator: (v) {
-                          if (v?.isEmpty ?? true) {
+                          if (v?.trim().isEmpty ?? true) {
                             return "Enter username";
                           }
 
@@ -140,7 +141,7 @@ class _YourProfileDoesntExistState extends State<YourProfileDoesntExist> {
                                   color: Colors.white.withOpacity(0.7),
                                   shape: BoxShape.circle),
                               child: IconButton(
-                                  onPressed: () {
+                                  onPressed: state is CreatingProfile?null:  () {
                                     xFile = null;
                                     setState(() {});
                                   },
