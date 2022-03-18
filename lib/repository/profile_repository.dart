@@ -18,4 +18,11 @@ class ProfileRepository {
       "profilePic": imageDownloadurl
     });
   }
+
+  Future<DocumentSnapshot<Map<String, dynamic>>> fetchProfile(String uid) {
+    return _firebaseFirestore
+        .collection("Users")
+        .doc(uid)
+        .get(GetOptions(source: Source.serverAndCache));
+  }
 }

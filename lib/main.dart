@@ -48,6 +48,7 @@ class MyApp extends StatelessWidget {
                           authRepository: AuthRepository())),
                   BlocProvider<FeedsCubit>(
                       create: (context) => FeedsCubit(
+                          profileRepository: ProfileRepository(),
                           feedsRepository: FeedsRepository(),
                           authRepository: AuthRepository()))
                 ],
