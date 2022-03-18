@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:twitter_clone/auth/cubit/auth_cubit.dart';
 import 'package:twitter_clone/auth/screens/unauthenticated.dart';
-import 'package:twitter_clone/home/screen/home_screen.dart';
+import 'package:twitter_clone/landing_screen/screen/landing_screen.dart';
 
 class Auth extends StatefulWidget {
   const Auth({Key? key}) : super(key: key);

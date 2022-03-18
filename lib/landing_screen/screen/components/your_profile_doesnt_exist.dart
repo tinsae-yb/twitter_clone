@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:twitter_clone/home/cubit/home_cubit.dart';
+import 'package:twitter_clone/landing_screen/cubit/home_cubit.dart';
 
 class YourProfileDoesntExist extends StatefulWidget {
   const YourProfileDoesntExist({Key? key}) : super(key: key);

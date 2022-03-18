@@ -4,11 +4,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:twitter_clone/auth/auth.dart';
 import 'package:twitter_clone/auth/cubit/auth_cubit.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:twitter_clone/home/cubit/home_cubit.dart';
-import 'package:twitter_clone/home/screen/create_tweet/create_tweet_screen.dart';
-import 'package:twitter_clone/home/screen/create_tweet/cubit/create_tweet_cubit.dart';
-import 'package:twitter_clone/home/screen/home_screen.dart';
+import 'package:twitter_clone/feeds/cubit/feeds_cubit.dart';
+import 'package:twitter_clone/landing_screen/cubit/home_cubit.dart';
+import 'package:twitter_clone/landing_screen/screen/create_tweet/create_tweet_screen.dart';
+import 'package:twitter_clone/landing_screen/screen/create_tweet/cubit/create_tweet_cubit.dart';
+import 'package:twitter_clone/landing_screen/screen/landing_screen.dart';
 import 'package:twitter_clone/repository/auth_repository.dart';
+import 'package:twitter_clone/repository/feeds_repository.dart';
 import 'package:twitter_clone/repository/image_repository.dart';
 import 'package:twitter_clone/repository/profile_repository.dart';
 import 'package:twitter_clone/repository/tweet_repository.dart';
@@ -37,11 +39,18 @@ class MyApp extends StatelessWidget {
 
           case "/home":
             return MaterialPageRoute(
-              builder: (context) => BlocProvider<HomeCubit>(
-                create: (context) => HomeCubit(
-                    imageRepository: ImageRepository(),
-                    profileRepository: ProfileRepository(),
-                    authRepository: AuthRepository()),
+              builder: (context) => MultiBlocProvider(
+                providers: [
+                  BlocProvider<HomeCubit>(
+                      create: (context) => HomeCubit(
+                          imageRepository: ImageRepository(),
+                          profileRepository: ProfileRepository(),
+                          authRepository: AuthRepository())),
+                  BlocProvider<FeedsCubit>(
+                      create: (context) => FeedsCubit(
+                          feedsRepository: FeedsRepository(),
+                          authRepository: AuthRepository()))
+                ],
                 child: const HomeScreen(),
               ),
             );
