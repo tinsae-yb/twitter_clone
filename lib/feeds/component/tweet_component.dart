@@ -1,20 +1,23 @@
+import 'dart:developer';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 import 'package:shimmer/shimmer.dart';
-import 'package:twitter_clone/feeds/cubit/feeds_cubit.dart';
+import 'package:twitter_clone/feeds/cubit/tweet_cubit.dart';
 import 'package:twitter_clone/model/tweet_model.dart';
 import 'package:twitter_clone/model/user_profile_model.dart';
 
-class FeedComponent extends StatefulWidget {
+class TweetComponent extends StatefulWidget {
   final TweetModel tweetModel;
-  const FeedComponent({Key? key, required this.tweetModel}) : super(key: key);
+  const TweetComponent({Key? key, required this.tweetModel}) : super(key: key);
 
   @override
-  State<FeedComponent> createState() => _FeedComponentState();
+  State<TweetComponent> createState() => _TweetComponentState();
 }
 
-class _FeedComponentState extends State<FeedComponent> {
+class _TweetComponentState extends State<TweetComponent> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -24,7 +27,7 @@ class _FeedComponentState extends State<FeedComponent> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           FutureBuilder<UserProfileModel?>(
-            future: BlocProvider.of<FeedsCubit>(context)
+            future: BlocProvider.of<TweetCubit>(context)
                 .getUserProfile(widget.tweetModel.author),
             builder: (context, snapshot) {
               if (snapshot.hasData) {
@@ -138,10 +141,65 @@ class _FeedComponentState extends State<FeedComponent> {
                       ),
                     ),
                   ),
+                const Divider(),
+                Text(
+                  DateFormat(DateFormat.YEAR_ABBR_MONTH_WEEKDAY_DAY)
+                      .format(widget.tweetModel.createdAt.toDate()),
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodyText1
+                      ?.copyWith(color: Colors.grey),
+                ),
+                const Divider(),
+                Row(
+                  children: [
+                    StreamBuilder<Map<String, dynamic>?>(
+                        stream: BlocProvider.of<TweetCubit>(context)
+                            .isTweetLiked(widget.tweetModel.id),
+                        builder: (context, snapshot) {
+                          return InkWell(
+                            onTap: () {
+                              if (snapshot.connectionState ==
+                                  ConnectionState.active) {
+                                BlocProvider.of<TweetCubit>(context)
+                                    .toggleTweet(!snapshot.hasData,
+                                        widget.tweetModel.id);
+                              }
+                            },
+                            child: Row(
+                              children: [
+                                Icon(
+                                  Icons.favorite_border,
+                                  color: snapshot.hasData
+                                      ? Theme.of(context).primaryColor
+                                      : Colors.black,
+                                ),
+                                const SizedBox(
+                                  width: 5,
+                                ),
+                                Text("${widget.tweetModel.likes}")
+                              ],
+                            ),
+                          );
+                        }),
+                    const SizedBox(
+                      width: 20,
+                    ),
+                    Row(
+                      children: [
+                        const Icon(Icons.comment_bank_outlined),
+                        const SizedBox(
+                          width: 5,
+                        ),
+                        Text("${widget.tweetModel.comments}")
+                      ],
+                    ),
+                  ],
+                )
               ],
             ),
           ),
-          Divider(),
+          const Divider(),
         ],
       ),
     );

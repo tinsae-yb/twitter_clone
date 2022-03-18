@@ -11,7 +11,51 @@ class TweetRepository {
       "author": author,
       "tweet": tweet,
       "imageUrl": imageUrl,
+      "comments": 0,
+      "likes": 0,
       "createdAt": FieldValue.serverTimestamp()
     });
+  }
+
+  Stream<QuerySnapshot<Map<String, dynamic>>> feeds() {
+    return _firebaseFirestore
+        .collection("Tweets")
+        .orderBy("createdAt", descending: true)
+        .snapshots();
+  }
+
+  Stream<DocumentSnapshot<Map<String, dynamic>>> likedByUser(
+      String userId, String postId) {
+    return _firebaseFirestore
+        .collection("Tweets")
+        .doc(postId)
+        .collection("Likes")
+        .doc("userId")
+        .snapshots();
+  }
+
+  toggleTweetLike(bool like, String userId, String postId) {
+    WriteBatch batch = _firebaseFirestore.batch();
+    if (!like) {
+      batch.delete(_firebaseFirestore
+          .collection("Tweets")
+          .doc(postId)
+          .collection("Likes")
+          .doc("userId"));
+      batch.update(_firebaseFirestore.collection("Tweets").doc(postId),
+          {"likes": FieldValue.increment(-1)});
+    } else {
+      batch.set(
+          _firebaseFirestore
+              .collection("Tweets")
+              .doc(postId)
+              .collection("Likes")
+              .doc("userId"),
+          {"createdAt": FieldValue.serverTimestamp()});
+      batch.update(_firebaseFirestore.collection("Tweets").doc(postId),
+          {"likes": FieldValue.increment(1)});
+    }
+
+    batch.commit();
   }
 }

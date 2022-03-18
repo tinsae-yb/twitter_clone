@@ -3,7 +3,7 @@ import 'dart:developer';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:twitter_clone/feeds/feeds_screen.dart';
+import 'package:twitter_clone/feeds/tweet_screen.dart';
 import 'package:twitter_clone/landing_screen/cubit/home_cubit.dart';
 import 'package:twitter_clone/landing_screen/screen/components/your_profile_doesnt_exist.dart';
 import 'package:twitter_clone/message/messages_screen.dart';
@@ -22,11 +22,6 @@ class _HomeScreenState extends State<HomeScreen> {
   // const GlobalKey feedScreenGlobalKey = GlobalKey(debugLabel: "feeds");
   @override
   void initState() {
-    widgets = [
-      const FeedsScreen(),
-      const SearchScreen(),
-      const MessagesScreen()
-    ];
     pageViewController = PageController(initialPage: 0);
     WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
       BlocProvider.of<HomeCubit>(context).checkUserProfileExists();
@@ -66,7 +61,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   },
                   controller: pageViewController,
                   children: const [
-                    FeedsScreen(),
+                    TweetScreen(),
                     SearchScreen(),
                     MessagesScreen()
                   ],

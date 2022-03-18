@@ -1,36 +1,44 @@
 import 'dart:async';
+import 'dart:math';
 
 import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:meta/meta.dart';
 import 'package:twitter_clone/model/tweet_model.dart';
 import 'package:twitter_clone/model/user_profile_model.dart';
 import 'package:twitter_clone/repository/auth_repository.dart';
-import 'package:twitter_clone/repository/feeds_repository.dart';
 import 'package:twitter_clone/repository/profile_repository.dart';
+import 'package:twitter_clone/repository/tweet_repository.dart';
 
-part 'feeds_state.dart';
+part 'tweet_state.dart';
 
-class FeedsCubit extends Cubit<FeedsState> {
-  final FeedsRepository feedsRepository;
+class TweetCubit extends Cubit<TweetState> {
+  final TweetRepository tweetRepository;
   final AuthRepository authRepository;
   final ProfileRepository profileRepository;
-  FeedsCubit(
+  TweetCubit(
       {required this.authRepository,
       required this.profileRepository,
-      required this.feedsRepository})
-      : super(FeedsInitial());
+      required this.tweetRepository})
+      : super(TweetsInitial());
 
   Stream<List<TweetModel>> feeds() {
-    return feedsRepository
+    return tweetRepository
         .feeds()
         .transform<List<TweetModel>>(StreamTransformer.fromHandlers(
       handleData: (data, sink) {
         sink.add(data.docs.map((e) {
           Map<String, dynamic> data = e.data();
 
-          return TweetModel(data['tweet'], data['author'], data['imageUrl'],
-              data['createdAt']);
+          return TweetModel(
+              id: e.id,
+              comments: data['comments'],
+              likes: data['likes'],
+              tweet: data['tweet'],
+              author: data['author'],
+              image: data['imageUrl'],
+              createdAt: data['createdAt']);
         }).toList());
       },
     ));
@@ -48,5 +56,21 @@ class FeedsCubit extends Cubit<FeedsState> {
           profilePic: data["profilePic"],
           userName: data["userName"]);
     }
+  }
+
+  Stream<Map<String, dynamic>?> isTweetLiked(String postId) {
+    User? user = authRepository.getUser();
+    return tweetRepository
+        .likedByUser(user?.uid ?? "", postId)
+        .transform(StreamTransformer.fromHandlers(
+      handleData: (data, sink) {
+        sink.add(data.data());
+      },
+    ));
+  }
+
+  toggleTweet(bool like, String postId) {
+    User? user = authRepository.getUser();
+    tweetRepository.toggleTweetLike(like, user?.uid ?? "", postId);
   }
 }
