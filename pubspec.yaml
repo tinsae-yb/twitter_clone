@@ -36,8 +36,10 @@ dependencies:
   cupertino_icons: ^1.0.2
 
   firebase_auth: ^3.3.8
-
   cloud_firestore: ^3.1.9
+  flutter_bloc: ^8.0.1
+
+
 
 dev_dependencies:
   flutter_test:
@@ -49,6 +51,9 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^1.0.0
+dependency_overrides:
+  cloud_functions_platform_interface: 5.0.21
+  firebase_auth_platform_interface: 6.1.11
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
