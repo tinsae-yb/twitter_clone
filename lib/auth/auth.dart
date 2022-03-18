@@ -16,18 +16,17 @@ class _AuthState extends State<Auth> {
   @override
   Widget build(BuildContext context) {
     return Material(
-      child: StreamBuilder<User?>(
-        stream: BlocProvider.of<AuthCubit>(context).authState(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
+      child: BlocConsumer<AuthCubit, AuthState>(
+        listener: (context, state) {
+          if (state is Authenticated) {
+            Navigator.pushReplacementNamed(context, "/home");
           }
-          if (snapshot.data == null) return const UnAuthenticatedScreen();
-          if (snapshot.data != null) return const HomeScreen();
+        },
+        builder: (context, state) {
+          if (state is UnAuthenticated) return const UnAuthenticatedScreen();
           return Container();
         },
+        buildWhen: (previous, current) => current is UnAuthenticated,
       ),
     );
   }

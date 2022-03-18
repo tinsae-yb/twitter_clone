@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -12,7 +13,11 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: Text("HOME"),
+        child: TextButton(
+            onPressed: () {
+              FirebaseAuth.instance.signOut();
+            },
+            child: Text("Sign out")),
       ),
     );
   }
