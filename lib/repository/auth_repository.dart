@@ -24,4 +24,8 @@ class AuthRepository {
   Stream<User?> authState() {
     return _firebaseAuth.authStateChanges();
   }
+
+  User? getUser() {
+    return _firebaseAuth.currentUser;
+  }
 }

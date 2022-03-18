@@ -38,6 +38,9 @@ dependencies:
   firebase_auth: ^3.3.8
   cloud_firestore: ^3.1.9
   flutter_bloc: ^8.0.1
+  firebase_storage: ^10.2.8
+  image_picker: ^0.8.4+11
+  uuid: ^3.0.6
 
 
 
@@ -52,8 +55,10 @@ dev_dependencies:
   # rules and activating additional ones.
   flutter_lints: ^1.0.0
 dependency_overrides:
-  cloud_functions_platform_interface: 5.0.21
+  cloud_firestore_platform_interface: 5.4.13
   firebase_auth_platform_interface: 6.1.11
+  firebase_storage_platform_interface: 4.0.14
+  
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

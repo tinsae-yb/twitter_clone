@@ -3,9 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:twitter_clone/auth/auth.dart';
 import 'package:twitter_clone/auth/cubit/auth_cubit.dart';
-import 'package:twitter_clone/auth/repository/auth_repository.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:twitter_clone/home/cubit/home_cubit.dart';
 import 'package:twitter_clone/home/screen/home_screen.dart';
+import 'package:twitter_clone/repository/auth_repository.dart';
+import 'package:twitter_clone/repository/image_repository.dart';
+import 'package:twitter_clone/repository/profile_repository.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -17,7 +20,6 @@ void main() async {
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -35,7 +37,13 @@ class MyApp extends StatelessWidget {
         switch (settings.name) {
           case "/home":
             return MaterialPageRoute(
-              builder: (context) => const HomeScreen(),
+              builder: (context) => BlocProvider<HomeCubit>(
+                create: (context) => HomeCubit(
+                    imageRepository: ImageRepository(),
+                    profileRepository: ProfileRepository(),
+                    authRepository: AuthRepository()),
+                child: const HomeScreen(),
+              ),
             );
 
           default:
