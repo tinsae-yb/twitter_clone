@@ -68,11 +68,23 @@ class TweetRepository {
             .doc(postId)
             .collection("Comments")
             .doc(),
-        {"reply": reply, "author": userId});
+        {
+          "reply": reply,
+          "author": userId,
+          "createdAt": FieldValue.serverTimestamp()
+        });
 
     batch.update(_firebaseFirestore.collection("Tweets").doc(postId),
         {"comments": FieldValue.increment(1)});
 
     batch.commit();
+  }
+
+  Stream<QuerySnapshot<Map<String, dynamic>>> tweetReplies(String tweetId) {
+    return _firebaseFirestore
+        .collection("Tweets")
+        .doc(tweetId)
+        .collection("Comments")
+        .snapshots();
   }
 }

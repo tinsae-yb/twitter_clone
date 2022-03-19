@@ -6,6 +6,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:meta/meta.dart';
 import 'package:twitter_clone/model/tweet_model.dart';
+import 'package:twitter_clone/model/tweet_reply_model.dart';
 import 'package:twitter_clone/model/user_profile_model.dart';
 import 'package:twitter_clone/repository/auth_repository.dart';
 import 'package:twitter_clone/repository/profile_repository.dart';
@@ -87,5 +88,21 @@ class TweetCubit extends Cubit<TweetState> {
     } catch (e) {
       emit(TweetReplyFailed());
     }
+  }
+
+  Stream<List<TweetReplyModel>> tweetReplies(String tweetId) {
+    return tweetRepository
+        .tweetReplies(tweetId)
+        .transform(StreamTransformer.fromHandlers(
+      handleData: (data, sink) {
+        sink.add(data.docs
+            .map((e) => TweetReplyModel(
+                timestamp: e.data()['createdAt'],
+                replyId: e.id,
+                authorId: e.data()["author"],
+                reply: e.data()["reply"]))
+            .toList());
+      },
+    ));
   }
 }

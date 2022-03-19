@@ -20,7 +20,6 @@ class _TweetScreenState extends State<TweetScreen> {
     return StreamBuilder<List<TweetModel>>(
         stream: BlocProvider.of<TweetCubit>(context).feeds(),
         builder: (context, snapshot) {
-          print(snapshot.error);
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const FeedsShimmer();
           }
@@ -29,8 +28,12 @@ class _TweetScreenState extends State<TweetScreen> {
             return ListView.builder(
               cacheExtent: size.height * 3,
               itemCount: snapshot.data!.length,
-              itemBuilder: (context, index) =>
-                  TweetComponent(tweetModel: snapshot.data![index]),
+              itemBuilder: (context, index) => InkWell(
+                  onTap: () {
+                    Navigator.pushNamed(context, "/tweetReplies",
+                        arguments: snapshot.data![index]);
+                  },
+                  child: TweetComponent(tweetModel: snapshot.data![index])),
             );
           }
           return const Center(

@@ -6,7 +6,6 @@ import 'package:twitter_clone/auth/cubit/auth_cubit.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:twitter_clone/feeds/cubit/tweet_cubit.dart';
 import 'package:twitter_clone/feeds/reply_tweet_screen.dart';
-import 'package:twitter_clone/feeds/tweet_replies_screen.dart';
 import 'package:twitter_clone/landing_screen/cubit/home_cubit.dart';
 import 'package:twitter_clone/landing_screen/screen/create_tweet/create_tweet_screen.dart';
 import 'package:twitter_clone/landing_screen/screen/create_tweet/cubit/create_tweet_cubit.dart';
@@ -16,6 +15,7 @@ import 'package:twitter_clone/repository/auth_repository.dart';
 import 'package:twitter_clone/repository/image_repository.dart';
 import 'package:twitter_clone/repository/profile_repository.dart';
 import 'package:twitter_clone/repository/tweet_repository.dart';
+import 'package:twitter_clone/feeds/tweet_replies.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -67,6 +67,7 @@ class MyApp extends StatelessWidget {
                 child: const CreateTweetScreen(),
               ),
             );
+
           case "/tweetReplies":
             return MaterialPageRoute(
               builder: (context) => MultiBlocProvider(
@@ -77,7 +78,9 @@ class MyApp extends StatelessWidget {
                           tweetRepository: TweetRepository(),
                           authRepository: AuthRepository()))
                 ],
-                child: const TweetRepliesScreen(),
+                child: TweetReplies(
+                  tweetModel: settings.arguments as TweetModel,
+                ),
               ),
             );
           case "/replyTweet":
