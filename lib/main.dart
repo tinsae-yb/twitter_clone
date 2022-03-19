@@ -6,7 +6,7 @@ import 'package:twitter_clone/auth/cubit/auth_cubit.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:twitter_clone/feeds/cubit/tweet_cubit.dart';
 import 'package:twitter_clone/feeds/reply_tweet_screen.dart';
-import 'package:twitter_clone/landing_screen/cubit/home_cubit.dart';
+import 'package:twitter_clone/landing_screen/cubit/landing_cubit.dart';
 import 'package:twitter_clone/landing_screen/screen/create_tweet/create_tweet_screen.dart';
 import 'package:twitter_clone/landing_screen/screen/create_tweet/cubit/create_tweet_cubit.dart';
 import 'package:twitter_clone/landing_screen/screen/landing_screen.dart';
@@ -43,8 +43,8 @@ class MyApp extends StatelessWidget {
             return MaterialPageRoute(
               builder: (context) => MultiBlocProvider(
                 providers: [
-                  BlocProvider<HomeCubit>(
-                      create: (context) => HomeCubit(
+                  BlocProvider<LandingCubit>(
+                      create: (context) => LandingCubit(
                           imageRepository: ImageRepository(),
                           profileRepository: ProfileRepository(),
                           authRepository: AuthRepository())),
@@ -54,7 +54,7 @@ class MyApp extends StatelessWidget {
                           tweetRepository: TweetRepository(),
                           authRepository: AuthRepository()))
                 ],
-                child: const HomeScreen(),
+                child: const LandingScreen(),
               ),
             );
           case "/createTweet":

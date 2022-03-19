@@ -25,4 +25,8 @@ class ProfileRepository {
         .doc(uid)
         .get(GetOptions(source: Source.serverAndCache));
   }
+
+  Stream<DocumentSnapshot<Map<String, dynamic>>> profileSnapshot(String uid) {
+    return _firebaseFirestore.collection("Users").doc(uid).snapshots();
+  }
 }

@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:twitter_clone/landing_screen/cubit/home_cubit.dart';
+import 'package:twitter_clone/landing_screen/cubit/landing_cubit.dart';
 
 class YourProfileDoesntExist extends StatefulWidget {
   const YourProfileDoesntExist({Key? key}) : super(key: key);
@@ -30,7 +30,7 @@ class _YourProfileDoesntExistState extends State<YourProfileDoesntExist> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return BlocConsumer<HomeCubit, HomeState>(
+    return BlocConsumer<LandingCubit, LandingState>(
       listener: (context, state) {
         if (state is CreatingProfileFailed) {
           ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
@@ -211,7 +211,7 @@ class _YourProfileDoesntExistState extends State<YourProfileDoesntExist> {
                                     );
 
                                     if (fromCamera != null) {
-                                      xFile = await BlocProvider.of<HomeCubit>(
+                                      xFile = await BlocProvider.of<LandingCubit>(
                                               context)
                                           .pickImage(fromCamera);
                                       setState(() {});
@@ -227,7 +227,7 @@ class _YourProfileDoesntExistState extends State<YourProfileDoesntExist> {
                               : () {
                                   if (formKey.currentState?.validate() ??
                                       false) {
-                                    BlocProvider.of<HomeCubit>(context)
+                                    BlocProvider.of<LandingCubit>(context)
                                         .finishCreatingProfile(
                                             firstNameTextEditingController.text
                                                 .trim(),

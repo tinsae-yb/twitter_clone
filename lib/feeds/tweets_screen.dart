@@ -5,14 +5,14 @@ import 'package:twitter_clone/feeds/component/tweet_component.dart';
 import 'package:twitter_clone/feeds/cubit/tweet_cubit.dart';
 import 'package:twitter_clone/model/tweet_model.dart';
 
-class TweetScreen extends StatefulWidget {
-  const TweetScreen({Key? key}) : super(key: key);
+class TweetsScreen extends StatefulWidget {
+  const TweetsScreen({Key? key}) : super(key: key);
 
   @override
-  State<TweetScreen> createState() => _TweetScreenState();
+  State<TweetsScreen> createState() => _TweetScreenState();
 }
 
-class _TweetScreenState extends State<TweetScreen> {
+class _TweetScreenState extends State<TweetsScreen> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;

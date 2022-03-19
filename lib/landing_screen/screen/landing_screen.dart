@@ -3,20 +3,21 @@ import 'dart:developer';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:twitter_clone/feeds/tweet_screen.dart';
-import 'package:twitter_clone/landing_screen/cubit/home_cubit.dart';
+import 'package:twitter_clone/feeds/tweets_screen.dart';
+import 'package:twitter_clone/landing_screen/cubit/landing_cubit.dart';
+import 'package:twitter_clone/landing_screen/screen/components/profile_header.dart';
 import 'package:twitter_clone/landing_screen/screen/components/your_profile_doesnt_exist.dart';
 import 'package:twitter_clone/message/messages_screen.dart';
 import 'package:twitter_clone/search/search_screen.dart';
 
-class HomeScreen extends StatefulWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+class LandingScreen extends StatefulWidget {
+  const LandingScreen({Key? key}) : super(key: key);
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  State<LandingScreen> createState() => _LandingScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _LandingScreenState extends State<LandingScreen> {
   late PageController pageViewController;
   late List<Widget> widgets;
   // const GlobalKey feedScreenGlobalKey = GlobalKey(debugLabel: "feeds");
@@ -24,7 +25,7 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     pageViewController = PageController(initialPage: 0);
     WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
-      BlocProvider.of<HomeCubit>(context).checkUserProfileExists();
+      BlocProvider.of<LandingCubit>(context).checkUserProfileExists();
     });
 
     super.initState();
@@ -32,13 +33,13 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<HomeCubit, HomeState>(
+    return BlocConsumer<LandingCubit, LandingState>(
       listener: (context, state) {
         if (state is UnAuthorized) {
           Navigator.of(context).pushNamedAndRemoveUntil(
               "/", (Route route) => route.settings.name == "/");
         } else if (state is ProfileCreated) {
-          BlocProvider.of<HomeCubit>(context).checkUserProfileExists();
+          BlocProvider.of<LandingCubit>(context).checkUserProfileExists();
         }
       },
       builder: (context, state) {
@@ -60,10 +61,18 @@ class _HomeScreenState extends State<HomeScreen> {
                     setState(() {});
                   },
                   controller: pageViewController,
-                  children: const [
-                    TweetScreen(),
-                    SearchScreen(),
-                    MessagesScreen()
+                  children: [
+                    Column(
+                      children: const [
+                        Align(
+                            alignment: Alignment.centerLeft,
+                            child: ProfileHeader()),
+                        Divider(),
+                        Expanded(child: TweetsScreen()),
+                      ],
+                    ),
+                    const SearchScreen(),
+                    const MessagesScreen()
                   ],
                 );
               }
@@ -75,7 +84,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       const Text("Internet connection problem"),
                       TextButton(
                           onPressed: () {
-                            BlocProvider.of<HomeCubit>(context)
+                            BlocProvider.of<LandingCubit>(context)
                                 .checkUserProfileExists();
                           },
                           child: const Text("Refresh"))
