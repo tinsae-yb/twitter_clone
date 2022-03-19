@@ -24,31 +24,38 @@ class _ProfileHeaderState extends State<ProfileHeader> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                ClipOval(
-                  child: Container(
-                    width: 50,
-                    height: 50,
-                    decoration: const BoxDecoration(
-                        color: Colors.white, shape: BoxShape.circle),
-                    child: snapshot.data?.profilePic == null
-                        ? Container()
-                        : CachedNetworkImage(
-                            imageUrl: snapshot.data!.profilePic!,
-                            placeholder: (context, url) => Shimmer.fromColors(
-                              child: Container(
-                                width: 50,
-                                height: 50,
-                                decoration: const BoxDecoration(
-                                    color: Colors.white,
-                                    shape: BoxShape.circle),
+                InkWell(
+                  onTap: () {
+                    if (Scaffold.hasDrawer(context)) {
+                      Scaffold.of(context).openDrawer();
+                    }
+                  },
+                  child: ClipOval(
+                    child: Container(
+                      width: 50,
+                      height: 50,
+                      decoration: const BoxDecoration(
+                          color: Colors.white, shape: BoxShape.circle),
+                      child: snapshot.data?.profilePic == null
+                          ? Container()
+                          : CachedNetworkImage(
+                              imageUrl: snapshot.data!.profilePic!,
+                              placeholder: (context, url) => Shimmer.fromColors(
+                                child: Container(
+                                  width: 50,
+                                  height: 50,
+                                  decoration: const BoxDecoration(
+                                      color: Colors.white,
+                                      shape: BoxShape.circle),
+                                ),
+                                baseColor: Colors.grey[300]!,
+                                highlightColor: Colors.grey[100]!,
                               ),
-                              baseColor: Colors.grey[300]!,
-                              highlightColor: Colors.grey[100]!,
+                              errorWidget: (context, url, error) =>
+                                  const Icon(Icons.error),
+                              fit: BoxFit.cover,
                             ),
-                            errorWidget: (context, url, error) =>
-                                const Icon(Icons.error),
-                            fit: BoxFit.cover,
-                          ),
+                    ),
                   ),
                 ),
                 Text(

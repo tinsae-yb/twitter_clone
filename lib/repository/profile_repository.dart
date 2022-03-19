@@ -23,10 +23,41 @@ class ProfileRepository {
     return _firebaseFirestore
         .collection("Users")
         .doc(uid)
-        .get(GetOptions(source: Source.serverAndCache));
+        .get(const GetOptions(source: Source.serverAndCache));
   }
 
   Stream<DocumentSnapshot<Map<String, dynamic>>> profileSnapshot(String uid) {
     return _firebaseFirestore.collection("Users").doc(uid).snapshots();
+  }
+
+  Stream<QuerySnapshot<Map<String, dynamic>>> followStatus(
+    String follower,
+    String user,
+  ) {
+    return _firebaseFirestore
+        .collection("follows")
+        .where("follower", isEqualTo: follower)
+        .where("user", isEqualTo: user)
+        .limit(1)
+        .snapshots();
+  }
+
+  Future<void> toggleFollowUnfollow(
+      String follower, String user, bool follow) async {
+    if (follow) {
+      return _firebaseFirestore
+          .collection("follows")
+          .doc()
+          .set({"follower": follower, "user": user, "following": true});
+    } else {
+      QuerySnapshot querySnapshot = await _firebaseFirestore
+          .collection("follows")
+          .where("follower", isEqualTo: follower)
+          .where("user", isEqualTo: user)
+          .get();
+      for (DocumentSnapshot item in querySnapshot.docs) {
+        await item.reference.delete();
+      }
+    }
   }
 }

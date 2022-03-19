@@ -25,7 +25,9 @@ class _LandingDrawerState extends State<LandingDrawer> {
             width: size.width,
             child: TextButton.icon(
                 style: const ButtonStyle(alignment: Alignment.centerLeft),
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.of(context).pushNamed("/profile");
+                },
                 icon: const Icon(Icons.person),
                 label: const Text("Profile")),
           ),

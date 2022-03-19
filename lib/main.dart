@@ -11,6 +11,8 @@ import 'package:twitter_clone/landing_screen/screen/create_tweet/create_tweet_sc
 import 'package:twitter_clone/landing_screen/screen/create_tweet/cubit/create_tweet_cubit.dart';
 import 'package:twitter_clone/landing_screen/screen/landing_screen.dart';
 import 'package:twitter_clone/model/tweet_model.dart';
+import 'package:twitter_clone/profile/cubit/profile_cubit.dart';
+import 'package:twitter_clone/profile/profile_screen.dart';
 import 'package:twitter_clone/repository/auth_repository.dart';
 import 'package:twitter_clone/repository/image_repository.dart';
 import 'package:twitter_clone/repository/profile_repository.dart';
@@ -95,6 +97,21 @@ class MyApp extends StatelessWidget {
                 ],
                 child: ReplyTweetScreen(
                   tweetModel: settings.arguments as TweetModel,
+                ),
+              ),
+            );
+          case "/profile":
+            return MaterialPageRoute(
+              builder: (context) => MultiBlocProvider(
+                providers: [
+                  BlocProvider<ProfileCubit>(
+                      create: (context) => ProfileCubit(
+                          profileRepository: ProfileRepository(),
+                          tweetRepository: TweetRepository(),
+                          authRepository: AuthRepository()))
+                ],
+                child: ProfileScreen(
+                  uid: settings.arguments as String?,
                 ),
               ),
             );
