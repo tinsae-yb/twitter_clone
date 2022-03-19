@@ -73,4 +73,19 @@ class TweetCubit extends Cubit<TweetState> {
     User? user = authRepository.getUser();
     tweetRepository.toggleTweetLike(like, user?.uid ?? "", postId);
   }
+
+  createTweetReply(String reply, String postId) async {
+    try {
+      emit(ReplyingTweet());
+      User? user = authRepository.getUser();
+      if (user == null) {
+        emit(UnAuthorized());
+      } else {
+        await tweetRepository.createTweetReply(reply, user.uid, postId);
+        emit(TweetReplied());
+      }
+    } catch (e) {
+      emit(TweetReplyFailed());
+    }
+  }
 }

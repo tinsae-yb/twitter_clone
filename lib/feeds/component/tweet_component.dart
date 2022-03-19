@@ -185,14 +185,20 @@ class _TweetComponentState extends State<TweetComponent> {
                     const SizedBox(
                       width: 20,
                     ),
-                    Row(
-                      children: [
-                        const Icon(Icons.comment_bank_outlined),
-                        const SizedBox(
-                          width: 5,
-                        ),
-                        Text("${widget.tweetModel.comments}")
-                      ],
+                    InkWell(
+                      onTap: () {
+                        Navigator.pushNamed(context, "/replyTweet",
+                            arguments: widget.tweetModel);
+                      },
+                      child: Row(
+                        children: [
+                          const Icon(Icons.comment_bank_outlined),
+                          const SizedBox(
+                            width: 5,
+                          ),
+                          Text("${widget.tweetModel.comments}")
+                        ],
+                      ),
                     ),
                   ],
                 )

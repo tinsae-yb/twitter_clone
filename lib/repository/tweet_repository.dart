@@ -58,4 +58,21 @@ class TweetRepository {
 
     batch.commit();
   }
+
+  createTweetReply(String reply, String userId, String postId) {
+    WriteBatch batch = _firebaseFirestore.batch();
+
+    batch.set(
+        _firebaseFirestore
+            .collection("Tweets")
+            .doc(postId)
+            .collection("Comments")
+            .doc(),
+        {"reply": reply, "author": userId});
+
+    batch.update(_firebaseFirestore.collection("Tweets").doc(postId),
+        {"comments": FieldValue.increment(1)});
+
+    batch.commit();
+  }
 }
