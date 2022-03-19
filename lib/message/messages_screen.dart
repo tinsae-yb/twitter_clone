@@ -12,7 +12,6 @@ class MessagesScreen extends StatefulWidget {
 class _MessagesScreenState extends State<MessagesScreen> {
   @override
   void initState() {
-    log("messages screen init");
     super.initState();
   }
 
