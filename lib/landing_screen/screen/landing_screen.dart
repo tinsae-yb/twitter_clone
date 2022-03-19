@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:twitter_clone/feeds/tweets_screen.dart';
 import 'package:twitter_clone/landing_screen/cubit/landing_cubit.dart';
+import 'package:twitter_clone/landing_screen/screen/components/drawer.dart';
 import 'package:twitter_clone/landing_screen/screen/components/profile_header.dart';
 import 'package:twitter_clone/landing_screen/screen/components/your_profile_doesnt_exist.dart';
 import 'package:twitter_clone/message/messages_screen.dart';
@@ -44,6 +45,7 @@ class _LandingScreenState extends State<LandingScreen> {
       },
       builder: (context, state) {
         return Scaffold(
+          drawer: LandingDrawer(),
           body: Builder(
             builder: (context) {
               if (state is CheckingIfProfileExists) {
@@ -118,7 +120,8 @@ class _LandingScreenState extends State<LandingScreen> {
                     label: "Message"),
               ]),
           floatingActionButton: state is CheckingIfProfileExists ||
-                  state is CheckingProfileExistenceFailed
+                  state is CheckingProfileExistenceFailed ||
+                  (state is ProfileCheckResult && !state.profileExist)
               ? null
               : FloatingActionButton(
                   onPressed: () => Navigator.pushNamed(context, "/createTweet"),

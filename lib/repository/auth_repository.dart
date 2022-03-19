@@ -28,4 +28,8 @@ class AuthRepository {
   User? getUser() {
     return _firebaseAuth.currentUser;
   }
+
+  Future<void> signOut() {
+    return _firebaseAuth.signOut();
+  }
 }

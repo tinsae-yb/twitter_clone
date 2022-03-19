@@ -85,6 +85,7 @@ class TweetRepository {
         .collection("Tweets")
         .doc(tweetId)
         .collection("Comments")
+        .orderBy("createdAt", descending: true)
         .snapshots();
   }
 }

@@ -87,4 +87,8 @@ class LandingCubit extends Cubit<LandingState> {
       ));
     }
   }
+
+  Future<void> signOut() {
+    return authRepository.signOut();
+  }
 }
